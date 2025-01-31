@@ -21,8 +21,7 @@ public class LoadSave {
 	public static final String SOUND_BUTTONS = "sound_button.png";
 	public static final String URM_BUTTONS = "urm_buttons.png";
 	public static final String VOLUME_BUTTONS = "volume_buttons.png";
-	// TODO: add a String MENU_BACKGROUND_IMG and assign "background_menu.png" to it.
-	// TODO: you should make sure that this file is in the res folder if not download it.
+	public static final String MENU_BACKGROUND_IMG = "background_menu.png";
 
 	public static BufferedImage GetSpriteAtlas(String fileName) {
 		BufferedImage img = null;
@@ -43,8 +42,6 @@ public class LoadSave {
 	}
 
 	public static int[][] GetLevelData() {
-		// TODO: double check that you code matches this one.  Some of you may not have
-		// gotten this far the other day.
 		BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
 		int[][] lvlData = new int[img.getHeight()][img.getWidth()];
 		for (int j = 0; j < img.getHeight(); j++)

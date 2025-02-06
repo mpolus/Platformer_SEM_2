@@ -5,6 +5,55 @@ import main.Game;
 public class Constants {
 
 	public static class UI {
+
+		public static class EnemyConstants{
+
+			public static final int CRABBY = 0;
+			public static final int IDLE = 0;
+			public static final int RUNNING = 1;
+			public static final int ATTACK = 2;
+			public static final int HIT = 3;
+			public static final int DEAD = 4;
+
+			public static final int CRABBY_WIDTH_DEFAULT = 72;
+			public static final int CRABBY_HEIGHT_DEFAULT = 32;
+
+
+			public static final int CRABBY_WIDTH = (int) (CRABBY_WIDTH_DEFAULT * Game.SCALE);
+			public static final int CRABBY_HEIGHT = (int) (CRABBY_HEIGHT_DEFAULT * Game.SCALE);
+
+			public static int GetSpriteAmount(int enemy_type, int enemy_state){
+				switch (enemy_type){
+					case CRABBY:
+						return switch(enemy_state){
+							case IDLE -> 9;
+							case RUNNING -> 6;
+							case ATTACK -> 7;
+							case HIT -> 4;
+							case DEAD -> 5;
+							default -> 0;
+						};
+				}
+
+				return 0;
+			}
+
+		}
+
+		public static class Environment {
+			public static final int BIG_CLOUD_WIDTH_DEFAULT = 448;
+			public static final int BIG_CLOUD_HEIGHT_DEFAULT = 101;
+			public static final int SMALL_CLOUD_WIDTH_DEFAULT = 74;
+			public static final int SMALL_CLOUD_HEIGHT_DEFAULT = 24;
+
+			public static final int BIG_CLOUD_WIDTH = (int) (BIG_CLOUD_WIDTH_DEFAULT * Game.SCALE);
+			public static final int BIG_CLOUD_HEIGHT = (int) (BIG_CLOUD_HEIGHT_DEFAULT * Game.SCALE);
+			public static final int SMALL_CLOUD_WIDTH = (int) (SMALL_CLOUD_WIDTH_DEFAULT * Game.SCALE);
+			public static final int SMALL_CLOUD_HEIGHT = (int) (SMALL_CLOUD_HEIGHT_DEFAULT * Game.SCALE);
+
+
+		}
+
 		public static class Buttons {
 			public static final int B_WIDTH_DEFAULT = 140;
 			public static final int B_HEIGHT_DEFAULT = 56;

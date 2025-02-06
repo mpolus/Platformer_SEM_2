@@ -3,6 +3,8 @@ package gamestates;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import entities.Player;
 import levels.LevelManager;
@@ -10,9 +12,12 @@ import main.Game;
 import ui.PauseOverlay;
 import utilz.LoadSave;
 
+import static utilz.Constants.UI.Environment.*;
+
 public class Playing extends State implements Statemethods {
 	private Player player;
 	private LevelManager levelManager;
+	private EnemyManager enemyManager;
 	private PauseOverlay pauseOverlay;
 	private boolean paused = false;
 
@@ -24,20 +29,25 @@ public class Playing extends State implements Statemethods {
 	int maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;
 	int maxLvlOffsetX = maxTilesOffset * Game.TILES_SIZE;
 
+	private BufferedImage backgroundImg, bigCloud, smallCloud;
+	int[]  smallCloudPos;
+	Random rnd = new Random();
+
 	public Playing(Game game) {
 		super(game);
 		initClasses();
-		if (!paused) {
-			levelManager.update();
-			player.update();
-			checkCloseToBorder();
-		} else {
-			pauseOverlay.update();
-		}
+
+		backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BG_IMG);
+		bigCloud = LoadSave.GetSpriteAtlas(LoadSave.BIG_CLOUDS);
+		smallCloud = LoadSave.GetSpriteAtlas(LoadSave.SMALL_CLOUDS);
+		smallCloudPos = new int[8];
+		for (int i = 0; i < smallCloudPos.length; i++)
+			smallCloudPos[i] = (int) (90 * Game.SCALE) + rnd.nextInt((int) (100 * Game.SCALE));
 	}
 
 	private void initClasses() {
 		levelManager = new LevelManager(game);
+		EnemyManager(this) = enemyManager;
 		player = new Player(200, 200, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE));
 		player.loadLvlData(levelManager.getCurrentLevel().getLevelData());
 		pauseOverlay = new PauseOverlay(this);
@@ -48,10 +58,13 @@ public class Playing extends State implements Statemethods {
 		if (!paused) {
 			levelManager.update();
 			player.update();
+			enemyManager.update();
+			checkCloseToBorder();
 		} else {
 			pauseOverlay.update();
 		}
 	}
+
 
 	private void checkCloseToBorder() {
 		int playerX = (int) player.getHitbox().x;
@@ -68,14 +81,34 @@ public class Playing extends State implements Statemethods {
 
 	@Override
 	public void draw(Graphics g) {
-		levelManager.draw(g, xLvlOffset); // TODO: also pass in xLvlOffset
-		player.render(g, xLvlOffset); // TODO: also pass in xLvlOffset
+		g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+
+		drawClouds(g);
+
+
+		levelManager.draw(g, xLvlOffset);
+		player.render(g, xLvlOffset); 
+		enemyManager.draw(g, xLvlOffset);
 
 		if (paused)
 			g.setColor(new Color(0, 0, 150));
 			g.fillRect( 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
 			pauseOverlay.draw(g);
 	}
+
+	public void drawClouds(Graphics g) {
+
+		for (int i = 0; i < 3; i++){
+			g.drawImage(bigCloud, i * BIG_CLOUD_WIDTH - (int) (xLvlOffset * 0.3), (int) (204 * Game.SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
+		}
+
+		for (int i = 0; i < smallCloudPos.length; i++){
+			g.drawImage(smallCloud, SMALL_CLOUD_WIDTH * 4 * i - (int) (xLvlOffset * 0.7), smallCloudPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
+
+		}
+
+	}
+
 
 	@Override
 	public void mouseClicked(MouseEvent e) {

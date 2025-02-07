@@ -10,11 +10,13 @@ import javax.imageio.ImageIO;
 
 import main.Game;
 
+import static utilz.Constants.UI.EnemyConstants.CRABBY;
+
 public class LoadSave {
 
 	public static final String PLAYER_ATLAS = "player_sprites.png";
 	public static final String LEVEL_ATLAS = "outside_sprites.png";
-//	public static final String LEVEL_ONE_DATA = "level_one_data.png";
+	//	public static final String LEVEL_ONE_DATA = "level_one_data.png";
 	public static final String LEVEL_ONE_DATA = "level_one_data_long.png";
 	public static final String MENU_BUTTONS = "button_atlas.png";
 	public static final String MENU_BACKGROUND = "menu_background.png";
@@ -55,20 +57,11 @@ public class LoadSave {
 			for (int i = 0; i < img.getWidth(); i++) {
 				Color color = new Color(img.getRGB(i, j));
 				int value = color.getGreen();
-				if (value == CRABBY)
-
-
+				if (value == CRABBY) {
+					list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+				}
 			}
-		// TODO: (2025-02-06): start of a double nested for loop
-		// outer for loop starts at 0 ends when less than img.getHeight(), increments by one each time, use j for variable
-		// inner for loop starts at 0 ends when less than img.getWidth(), increments by one each time, use i for variable
-		// TODO: (2025-02-06): create a Color named color and get from new Color(img.getRGB(i, j)
-		// TODO: (2025-02-06): create an int named value and assign color.getGreen() to it
-		// TODO: (2025-02-06): start of if statement
-		// check if the value is equal to CRABBY
-		// when true add new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE) to the list
-		// TODO: (2025-02-06): end of if statement
-		// TODO: (2025-02-06): end of the double nested for loop
+
 	}
 
 	public static int[][] GetLevelData() {
